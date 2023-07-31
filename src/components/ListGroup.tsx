@@ -1,4 +1,8 @@
+import {useState} from 'react';
+
 function ListGroup() {
+	const [selectedCountryIndex, setSelectedCountryIndex] = useState(-1);
+
 	const countries: string[] = [
 		'saudi arabia',
 		'syria',
@@ -7,8 +11,10 @@ function ListGroup() {
 		'palastine',
 	];
 
-	const handleClick = (event: React.MouseEvent, country: string) =>
-		console.log(event, `${country} clicked`);
+	const handleClick = (event: React.MouseEvent, index: number) => {
+		setSelectedCountryIndex(index);
+		console.log(event, `${countries[index]} clicked`);
+	};
 
 	return (
 		<>
@@ -17,9 +23,11 @@ function ListGroup() {
 			<ul className='list-group'>
 				{countries.map((country, index) => (
 					<li
-						className='list-group-item'
+						className={
+							'list-group-item' + (selectedCountryIndex === index ? ' active' : '')
+						}
 						key={index}
-						onClick={event => handleClick(event, country)}
+						onClick={event => handleClick(event, index)}
 					>
 						{country}
 					</li>
