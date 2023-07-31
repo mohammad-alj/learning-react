@@ -1,5 +1,5 @@
 function ListGroup() {
-	const countries: string[] = [
+	let countries: string[] = [
 		'saudi arabia',
 		'syria',
 		'egypt',
@@ -7,9 +7,12 @@ function ListGroup() {
 		'palastine',
 	];
 
+	countries = [];
+
 	return (
 		<>
-			<h1>List Group</h1>
+			<h1>Countries</h1>
+			{countries.length === 0 && <p>No items found</p>}
 			<ul className='list-group'>
 				{countries.map(country => (
 					<li className='list-group-item' key={country}>
