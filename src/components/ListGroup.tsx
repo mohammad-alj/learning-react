@@ -1,36 +1,31 @@
 import {useState} from 'react';
 
-function ListGroup() {
-	const [selectedCountryIndex, setSelectedCountryIndex] = useState(-1);
+interface Props {
+	listName: string;
+	items: string[];
+}
+
+function ListGroup(props: Props) {
+	const [itemIndex, setItemIndex] = useState(-1);
 	const [name, setName] = useState('');
 
-	const countries: string[] = [
-		'saudi arabia',
-		'syria',
-		'egypt',
-		'united arab emerates',
-		'palastine',
-	];
-
 	const handleClick = (index: number) => {
-		setName(countries[index]);
-		setSelectedCountryIndex(index);
+		setName(props.items[index]);
+		setItemIndex(index);
 	};
 
 	return (
 		<>
-			<h1>{name ? name : 'Countries'}</h1>
-			{countries.length === 0 && <p>No items found</p>}
+			<h1>{name ? name : props.listName}</h1>
+			{props.items.length === 0 && <p>No items found</p>}
 			<ul className='list-group'>
-				{countries.map((country, index) => (
+				{props.items.map((item, index) => (
 					<li
-						className={
-							'list-group-item' + (selectedCountryIndex === index ? ' active' : '')
-						}
+						className={'list-group-item' + (itemIndex === index ? ' active' : '')}
 						key={index}
 						onClick={() => handleClick(index)}
 					>
-						{country}
+						{item}
 					</li>
 				))}
 			</ul>
