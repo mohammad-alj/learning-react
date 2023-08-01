@@ -1,22 +1,30 @@
 import {useState} from 'react';
-import './app.css';
-import Like from './components/Like';
 
 function App() {
-	const [isLiked, setIsLiked] = useState(false);
-
+	const [game, setGame] = useState({
+		id: 1,
+		player: {
+			name: 'mohammed',
+			health: 100,
+		},
+	});
 	return (
-		<>
-			<Like
-				onClick={() => {
-					const invert = !isLiked;
-					setIsLiked(invert);
-					const message = invert ? 'liked' : 'remove like';
-					console.log(message);
-				}}
-				size={25}
-			/>
-		</>
+		<div>
+			<h1>Player name {game.player.name}</h1>
+			<button
+				onClick={() =>
+					setGame({
+						...game,
+						player: {
+							...game.player,
+							name: 'abdulrazzak',
+						},
+					})
+				}
+			>
+				Change name to abdulrazzak
+			</button>
+		</div>
 	);
 }
 
