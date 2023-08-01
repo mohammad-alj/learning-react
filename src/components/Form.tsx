@@ -1,9 +1,21 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 
 const Form = () => {
+	const nameRef = useRef<HTMLInputElement>(null);
+	const ageRef = useRef<HTMLInputElement>(null);
+	const person = {
+		name: '',
+		age: 0,
+	};
+
 	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
-		console.log('submitted');
+		if (!nameRef.current?.value || !ageRef.current?.value)
+			throw new Error('Must provide name and age.');
+
+		person.name = nameRef.current?.value;
+		person.age = parseInt(ageRef.current?.value);
+		console.log(person);
 	};
 
 	return (
@@ -18,13 +30,20 @@ const Form = () => {
 					id='name'
 					autoComplete='off'
 					autoFocus
+					ref={nameRef}
 				/>
 			</div>
 			<div className='mb-3'>
 				<label className='form-label' htmlFor='age'>
 					Age
 				</label>
-				<input type='number' className='form-control' id='age' autoComplete='off' />
+				<input
+					type='number'
+					className='form-control'
+					id='age'
+					autoComplete='off'
+					ref={ageRef}
+				/>
 			</div>
 			<button className='btn btn-primary' type='submit'>
 				submit
