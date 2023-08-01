@@ -1,14 +1,8 @@
-import ListGroup from './components/ListGroup';
+import Alert from './components/Alert';
 import './app.css';
 
 function App() {
-	return (
-		<ListGroup
-			heading='Countries'
-			items={['Kingdom Saudi Arabia', 'Syria', 'Egypt']}
-			onSelectItem={item => console.log(item + ' selected')}
-		/>
-	);
+	return <Alert>wow this is a really nice alert, thanks bootstrap!</Alert>;
 }
 
 export default App;
