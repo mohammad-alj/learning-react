@@ -1,8 +1,12 @@
-import Alert from './components/Alert';
 import './app.css';
+import Button from './components/Button';
 
 function App() {
-	return <Alert>wow this is a really nice alert, thanks bootstrap!</Alert>;
+	return (
+		<Button color='primary' onClick={() => console.log('clicked')}>
+			Click me!
+		</Button>
+	);
 }
 
 export default App;
