@@ -1,10 +1,21 @@
+import {useState} from 'react';
 import './app.css';
-import Button from './components/Button';
+import Like from './components/Like';
 
 function App() {
+	const [isLiked, setIsLiked] = useState(false);
+
 	return (
 		<>
-			<Button color='success'>button</Button>
+			<Like
+				onClick={() => {
+					const invert = !isLiked;
+					setIsLiked(invert);
+					const message = invert ? 'liked' : 'remove like';
+					console.log(message);
+				}}
+				size={25}
+			/>
 		</>
 	);
 }
