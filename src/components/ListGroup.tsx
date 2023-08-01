@@ -1,29 +1,31 @@
 import {useState} from 'react';
 
 interface Props {
-	listName: string;
+	heading: string;
 	items: string[];
+	onSelectItem: (item: string) => void;
 }
 
-function ListGroup(props: Props) {
+function ListGroup({heading, items, onSelectItem}: Props) {
 	const [itemIndex, setItemIndex] = useState(-1);
-	const [name, setName] = useState('');
 
 	const handleClick = (index: number) => {
-		setName(props.items[index]);
 		setItemIndex(index);
 	};
 
 	return (
 		<>
-			<h1>{name ? name : props.listName}</h1>
-			{props.items.length === 0 && <p>No items found</p>}
+			<h1>{heading}</h1>
+			{items.length === 0 && <p>No items found</p>}
 			<ul className='list-group'>
-				{props.items.map((item, index) => (
+				{items.map((item, index) => (
 					<li
 						className={'list-group-item' + (itemIndex === index ? ' active' : '')}
 						key={index}
-						onClick={() => handleClick(index)}
+						onClick={() => {
+							handleClick(index);
+							onSelectItem(items[index]);
+						}}
 					>
 						{item}
 					</li>
