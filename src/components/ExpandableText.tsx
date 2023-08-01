@@ -10,9 +10,6 @@ const ExpandableText = ({children, maxLength = 100}: Props) => {
 
 	const [hidden, setHidden] = useState(children.length > maxLength);
 
-	// if text didn't hit the max length
-	if (children.length <= maxLength) return <p>{children}</p>;
-
 	// now here we check the state
 	return hidden ? (
 		<p>
@@ -22,7 +19,9 @@ const ExpandableText = ({children, maxLength = 100}: Props) => {
 	) : (
 		<p>
 			{children}
-			<button onClick={() => setHidden(true)}>show less</button>
+			{children.length > maxLength && (
+				<button onClick={() => setHidden(true)}>show less</button>
+			)}
 		</p>
 	);
 };
