@@ -1,21 +1,15 @@
+import styles from './Button.module.css';
+
 interface Props {
 	children: string;
-	color?:
-		| 'primary'
-		| 'secondary'
-		| 'danger'
-		| 'info'
-		| 'success'
-		| 'warning'
-		| 'light'
-		| 'dark'
-		| 'link';
+	color?: 'primary' | 'secondary' | 'danger' | 'info' | 'success';
+
 	onClick?: () => void;
 }
 
 const Button = ({color = 'primary', children, onClick}: Props) => {
 	return (
-		<button className={'btn btn-' + color} onClick={onClick}>
+		<button className={[styles.btn, styles['btn-' + color]].join(' ')} onClick={onClick}>
 			{children}
 		</button>
 	);
