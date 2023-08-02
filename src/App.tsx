@@ -2,18 +2,23 @@ import {useEffect, useRef, useState} from 'react';
 import './App.css';
 import axios, {AxiosError} from 'axios';
 
-function App() {
-	const [users, setUsers] = useState<{name: string; id: number}[]>([]);
+interface User {
+	name: string;
+	id: number;
+}
 
-	const inputRef = useRef<HTMLInputElement>(null);
+function App() {
+	const [users, setUsers] = useState<User[]>([]);
+	const [error, setError] = useState('');
 	useEffect(() => {
 		axios
-			.get('https://jsonplaceholder.typicode.com/users')
+			.get<User[]>('https://jsonplaceholder.typicode.com/users')
 			.then(res => setUsers(res.data))
-			.catch((err: AxiosError) => console.log(err.response?.status));
+			.catch((err: AxiosError) => setError(err.message));
 	}, []);
 	return (
 		<div>
+			{error && <p className='text-danger'>{error}</p>}
 			<ul className='list-group'>
 				{users.map(u => (
 					<li key={u.id}>{u.name}</li>
