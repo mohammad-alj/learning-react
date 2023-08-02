@@ -1,6 +1,6 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import './App.css';
-import axios, {AxiosError, CanceledError} from 'axios';
+import apiClient, {AxiosError, CanceledError} from './services/api-client';
 
 interface User {
 	name: string;
@@ -15,8 +15,8 @@ function App() {
 	useEffect(() => {
 		const controller = new AbortController();
 		setLoading(true);
-		axios
-			.get<User[]>('https://jsonplaceholder.typicode.com/users', {signal: controller.signal})
+		apiClient
+			.get<User[]>('/users', {signal: controller.signal})
 			.then(res => {
 				setUsers(res.data);
 				setLoading(false);
@@ -29,23 +29,21 @@ function App() {
 		return () => controller.abort('User navigated away.');
 	}, []);
 
-	const deleteUser = (userID: number) => {
+	const deleteUser = (user: User) => {
 		const originalUsers = [...users];
-		setUsers(users.filter(u => u.id !== userID));
-		axios
-			.delete('https://jsonplaceholder.typicode.com/users/' + userID.toString())
-			.catch(err => {
-				setError(err.message);
-				setUsers(originalUsers);
-			});
+		setUsers(users.filter(u => u.id !== user.id));
+		apiClient.delete('/users/' + user.id.toString()).catch(err => {
+			setError(err.message);
+			setUsers(originalUsers);
+		});
 	};
 
 	const addUser = () => {
 		const originalUsers = [...users];
 		const newUser = {name: 'mohammed', id: 0};
 		setUsers([newUser, ...users]);
-		axios
-			.post('https://jsonplaceholder.typicode.com/users', newUser)
+		apiClient
+			.post('/users', newUser)
 			.then(res => {
 				setUsers([res.data, ...users]);
 			})
@@ -55,19 +53,17 @@ function App() {
 			});
 	};
 
-	const updateUser = (userId: number) => {
+	const updateUser = (user: User) => {
 		const originalUsers = [...users];
 		const newUser = {
-			id: userId,
-			name: users.filter(u => u.id === u.id)[0].name + '!',
+			id: user.id,
+			name: user.name + '!',
 		};
-		setUsers(users.map(u => (u.id === userId ? newUser : u)));
-		axios
-			.patch('https://jsonplaceholder.typicode.com/xusers/' + userId.toString, newUser)
-			.catch(err => {
-				setError(err.message);
-				setUsers(originalUsers);
-			});
+		setUsers(users.map(u => (u.id === user.id ? newUser : u)));
+		apiClient.patch('/users/' + user.toString, newUser).catch(err => {
+			setError(err.message);
+			setUsers(originalUsers);
+		});
 	};
 
 	return (
@@ -86,13 +82,13 @@ function App() {
 						<div className='buttons'>
 							<button
 								className='btn btn-outline-secondary mx-1'
-								onClick={() => updateUser(u.id)}
+								onClick={() => updateUser(u)}
 							>
 								Update
 							</button>
 							<button
 								className='btn btn-outline-danger '
-								onClick={() => deleteUser(u.id)}
+								onClick={() => deleteUser(u)}
 							>
 								Delete
 							</button>
