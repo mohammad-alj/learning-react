@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import './App.css';
-import apiClient, {AxiosError, CanceledError} from './services/api-client';
+import {AxiosError, CanceledError} from './services/api-client';
 import userService, {User} from './services/user-service';
 
 function App() {
@@ -10,8 +10,7 @@ function App() {
 
 	useEffect(() => {
 		setLoading(true);
-		const {request, cancel} = userService.getAllUsers();
-
+		const {request, cancel} = userService.getAll<User>();
 		console.log(request);
 
 		request
@@ -32,7 +31,7 @@ function App() {
 		const originalUsers = [...users];
 		setUsers(users.filter(u => u.id !== user.id));
 
-		userService.deleteUser(user).catch(err => {
+		userService.delete(user.id).catch(err => {
 			setError(err.message);
 			setUsers(originalUsers);
 		});
@@ -40,9 +39,10 @@ function App() {
 
 	const addUser = () => {
 		const originalUsers = [...users];
-
+		const newUser = {name: 'mohammed', id: 0};
+		setUsers([newUser, ...users]);
 		userService
-			.addUser('mohammed')
+			.create<User>(newUser)
 			.then(res => {
 				setUsers([res.data, ...users]);
 			})
@@ -55,7 +55,7 @@ function App() {
 	const updateUser = (user: User) => {
 		const originalUsers = [...users];
 		setUsers(users.map(u => (u.id === user.id ? {...user, name: user.name + '!'} : u)));
-		userService.updateUser(user).catch(err => {
+		userService.update<User>(user).catch(err => {
 			setError(err.message);
 			setUsers(originalUsers);
 		});
